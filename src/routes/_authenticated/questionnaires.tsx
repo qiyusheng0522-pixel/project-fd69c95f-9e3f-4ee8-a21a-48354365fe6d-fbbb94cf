@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/page-header";
-import { ClipboardList, HeartPulse, Activity, Droplet, ChevronRight } from "lucide-react";
+import { ClipboardList, HeartPulse, Activity, Droplet, ChevronRight, ShieldAlert, Layers } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/questionnaires")({
   head: () => ({ meta: [{ title: "专病量表 · 心安管家" }] }),
@@ -13,6 +13,8 @@ export const SCALES = [
   { id: "hypertension", title: "高血压自我管理评估", desc: "8 题 · 评估血压控制与依从性", icon: Droplet },
   { id: "chd", title: "冠心病症状量表", desc: "10 题 · 西雅图心绞痛简版", icon: HeartPulse },
   { id: "heart_failure", title: "心衰生活质量量表 (MLHFQ)", desc: "21 题 · 评估心衰对生活影响", icon: Activity },
+  { id: "scvd", title: "亚临床心血管病 (SCVD) 风险筛查", desc: "10 题 · 早期识别无症状动脉硬化风险", icon: ShieldAlert },
+  { id: "plaque", title: "颈动脉/冠脉斑块管理评估", desc: "10 题 · 评估斑块稳定性与生活方式干预", icon: Layers },
   { id: "lifestyle", title: "心血管生活方式评估", desc: "12 题 · 饮食 / 运动 / 睡眠", icon: ClipboardList },
 ];
 
