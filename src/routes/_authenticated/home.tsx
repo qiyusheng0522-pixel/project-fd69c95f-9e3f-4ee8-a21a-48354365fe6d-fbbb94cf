@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, ClipboardList, HeartPulse, Bell, Camera, Sparkles, ChevronRight } from "lucide-react";
+import {
+  FileText, ClipboardList, HeartPulse, Bell, Camera, Sparkles, ChevronRight,
+  Activity, Pill, Droplet, Stethoscope, MessageSquare, ShieldAlert, Layers,
+  PlayCircle, BookOpen, ShoppingBag, CheckCircle2, Circle,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({ meta: [{ title: "首页 · 心安管家" }] }),
@@ -31,69 +35,346 @@ function Home() {
       (await supabase.from("health_plans").select("id,title,summary,risk_level,created_at").order("created_at", { ascending: false }).limit(1).maybeSingle()).data,
   });
 
+  const name = profile?.full_name || "朋友";
+  const archiveDone = Math.min(
+    100,
+    20 +
+      (profile?.full_name ? 15 : 0) +
+      (profile?.birth_date ? 10 : 0) +
+      (profile?.chronic_conditions ? 15 : 0) +
+      ((counts?.records ?? 0) > 0 ? 20 : 0) +
+      ((counts?.qs ?? 0) > 0 ? 20 : 0),
+  );
+
   return (
-    <div>
-      <header className="relative overflow-hidden bg-gradient-hero px-5 pb-10 pt-10 text-primary-foreground">
+    <div className="space-y-4 pb-6">
+      {/* AI 主治医生卡片 */}
+      <section className="relative overflow-hidden bg-gradient-hero px-4 pb-5 pt-5 text-primary-foreground">
         <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-2xl" />
         <div className="pointer-events-none absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
-        <p className="text-xs text-white/85">省人民医院 · 心血管科</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight">您好，{profile?.full_name || "朋友"}</h1>
-        <p className="mt-1 text-sm text-white/85">今天也要好好照顾自己的心 ❤</p>
-        <div className="relative mt-6 grid grid-cols-4 gap-2 text-center">
-          {[
-            { label: "病历", value: counts?.records ?? 0 },
-            { label: "量表", value: counts?.qs ?? 0 },
-            { label: "方案", value: counts?.plans ?? 0 },
-            { label: "用药", value: counts?.meds ?? 0 },
-          ].map((s) => (
-            <div key={s.label} className="rounded-2xl bg-white/18 px-2 py-3 backdrop-blur-md ring-1 ring-white/15">
-              <div className="text-lg font-semibold leading-none">{s.value}</div>
-              <div className="mt-1 text-[11px] text-white/85">{s.label}</div>
+        <div className="relative flex gap-3">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 ring-1 ring-white/30 backdrop-blur">
+            <HeartPulse className="h-7 w-7" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-1 text-[11px] text-white/85">
+              <Sparkles className="h-3 w-3" /> 心安管家 · 您的 AI 主治医生
             </div>
+            <h1 className="mt-1 text-lg font-bold leading-tight">
+              {name}，今早数据已为您解读 👋
+            </h1>
+            <p className="mt-1 text-[12px] leading-relaxed text-white/90">
+              血压 <b>128/82</b>，较昨日平稳；颈动脉斑块复查临近，建议本周完成 SCVD 风险筛查。
+            </p>
+          </div>
+        </div>
+        <div className="relative mt-4 flex items-center gap-2 rounded-full bg-white/18 px-3 py-2 ring-1 ring-white/25 backdrop-blur-md">
+          <MessageSquare className="h-4 w-4 text-white/90" />
+          <span className="flex-1 text-[12px] text-white/80">向 AI 主治医生提问…</span>
+          <Link to="/plan" className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-brand-deep">
+            问诊
+          </Link>
+        </div>
+        <div className="relative mt-2 flex flex-wrap gap-1.5">
+          {["血压偏高怎么办", "斑块如何稳定", "他汀用药咨询", "复诊预约"].map((t) => (
+            <span key={t} className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] text-white/90 ring-1 ring-white/20">
+              {t}
+            </span>
           ))}
         </div>
-      </header>
-      <div className="-mt-5 space-y-4 px-4 pb-6">
-        <Link to="/records/upload" className="flex items-center gap-3 rounded-3xl bg-card p-4 shadow-elev transition hover:-translate-y-0.5">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-hero text-primary-foreground shadow-card"><Camera className="h-6 w-6" /></div>
-          <div className="flex-1">
-            <div className="text-sm font-semibold">拍照录入病历</div>
-            <div className="mt-0.5 text-[11px] text-muted-foreground">化验单 · 入院单 · 手术报告，OCR 一键识别</div>
+        <Link
+          to="/profile"
+          className="relative mt-3 flex items-center gap-3 rounded-2xl bg-white/95 p-3 text-foreground shadow-elev"
+        >
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand-deep">
+            <Stethoscope className="h-5 w-5" />
           </div>
-          <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          <div className="min-w-0 flex-1">
+            <div className="text-[13px] font-semibold">咨询心血管科医生？</div>
+            <div className="text-[11px] text-muted-foreground">
+              选择主任 / 主治医生 1v1 · 入院期间锁定主管医护
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
         </Link>
-        <div className="rounded-3xl bg-gradient-card p-4 shadow-card ring-1 ring-white/60">
-          <div className="flex items-center gap-2 text-sm font-semibold text-brand-deep"><Sparkles className="h-4 w-4" /> 最新健康方案</div>
+      </section>
+
+      {/* 实时指标 */}
+      <section className="px-4">
+        <div className="grid grid-cols-3 gap-2.5">
+          <Metric icon={Droplet} label="今日血压" value="128/82" unit="mmHg" foot="↘ 平稳" />
+          <Metric icon={Pill} label="今日用药" value="2/3" unit="次" foot="下次 18:30" />
+          <Metric icon={Activity} label="运动" value="36" unit="min" foot="达成 72%" />
+        </div>
+      </section>
+
+      {/* 快捷入口 */}
+      <section className="px-4">
+        <div className="grid grid-cols-4 gap-2">
+          <Quick to="/records" icon={FileText} label="病历档案" />
+          <Quick to="/reminders" icon={Bell} label="用药提醒" />
+          <Quick to="/records/upload" icon={Camera} label="拍照录入" />
+          <Quick to="/plan" icon={Sparkles} label="我的方案" />
+        </div>
+      </section>
+
+      {/* AI 建档 · 拍一拍 */}
+      <section className="px-4">
+        <Link
+          to="/records/upload"
+          className="block overflow-hidden rounded-3xl bg-gradient-card p-4 shadow-card ring-1 ring-white/70"
+        >
+          <div className="flex items-center gap-1 text-[11px] text-brand-deep">
+            <Sparkles className="h-3 w-3" /> AI 建档 · 拍一拍
+          </div>
+          <div className="mt-1 text-[15px] font-semibold">
+            拍照上传化验单 / 入院单 / 手术报告
+          </div>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            AI 自动识别并归档，心血管科主诊医生随访前即可查看
+          </p>
+          <div className="mt-3 flex items-center justify-between">
+            <div className="flex-1">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-muted-foreground">健康档案完成度</span>
+                <span className="font-semibold text-brand-deep">{archiveDone}%</span>
+              </div>
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
+                <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${archiveDone}%` }} />
+              </div>
+            </div>
+            <div className="ml-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-brand text-primary-foreground shadow-card">
+              <Camera className="h-5 w-5" />
+            </div>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-1.5 text-[11px]">
+            <Tag label={`化验单已识别 ${counts?.records ?? 0}`} done />
+            <Tag label={`量表已填 ${counts?.qs ?? 0}`} done={(counts?.qs ?? 0) > 0} />
+            <Tag label="既往病史待上传" />
+            <Tag label="身份证待上传" />
+          </div>
+        </Link>
+      </section>
+
+      {/* 今日行动 */}
+      <section className="px-4">
+        <SectionTitle title="今日行动" extra="全部待办" to="/reminders" />
+        <div className="space-y-2">
+          <Todo icon={Pill} title="阿托伐他汀 20mg" sub="20:00 · 睡前服用" cta="确认" />
+          <Todo icon={Droplet} title="晚间血压测量" sub="未记录" cta="记录" />
+          <Todo icon={Camera} title="晚餐饮食打卡" sub="拍照识别 · 一键完成" cta="打卡" />
+        </div>
+      </section>
+
+      {/* 我的方案 */}
+      <section className="px-4">
+        <div className="rounded-3xl bg-card p-4 shadow-card">
+          <div className="flex items-center gap-2 text-sm font-semibold text-brand-deep">
+            <Sparkles className="h-4 w-4" /> 最新健康方案
+          </div>
           {latestPlan ? (
             <div className="mt-3">
               <div className="text-sm font-medium">{latestPlan.title}</div>
               <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{latestPlan.summary}</p>
-              <Link to="/plan" className="mt-3 inline-flex items-center rounded-full bg-brand px-3.5 py-1.5 text-[11px] font-medium text-primary-foreground">查看完整方案</Link>
+              <Link to="/plan" className="mt-3 inline-flex items-center rounded-full bg-brand px-3.5 py-1.5 text-[11px] font-medium text-primary-foreground">
+                查看完整方案
+              </Link>
             </div>
           ) : (
             <div className="mt-3">
               <p className="text-xs text-muted-foreground">完善档案与量表后，可一键生成 AI 个性化方案。</p>
-              <Link to="/plan" className="mt-3 inline-flex items-center rounded-full bg-brand px-3.5 py-1.5 text-[11px] font-medium text-primary-foreground">立即生成方案</Link>
+              <Link to="/plan" className="mt-3 inline-flex items-center rounded-full bg-brand px-3.5 py-1.5 text-[11px] font-medium text-primary-foreground">
+                立即生成方案
+              </Link>
             </div>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <QuickCard to="/archive" icon={ClipboardList} title="基础档案" desc="完善个人健康信息" />
-          <QuickCard to="/questionnaires" icon={HeartPulse} title="专病量表" desc="心衰 / 冠心病 / 高血压" />
-          <QuickCard to="/records" icon={FileText} title="病历档案" desc="历史病历与化验结果" />
-          <QuickCard to="/reminders" icon={Bell} title="提醒中心" desc="用药与随访提醒" />
+      </section>
+
+      {/* 评估中心 — 含 SCVD 与斑块管理 */}
+      <section className="px-4">
+        <SectionTitle title="评估中心" sub="多维评估 + 专病量表" extra="全部 6 项" to="/questionnaires" />
+        <div className="space-y-2">
+          <ScaleRow
+            to="/questionnaires/$type"
+            params={{ type: "scvd" }}
+            icon={ShieldAlert}
+            tag="首诊推荐"
+            title="亚临床心血管病 (SCVD) 风险筛查"
+            sub="10 题 · 约 2 分钟，识别无症状期动脉硬化风险"
+          />
+          <ScaleRow
+            to="/questionnaires/$type"
+            params={{ type: "plaque" }}
+            icon={Layers}
+            tag="斑块管理"
+            title="颈动脉 / 冠脉斑块管理评估"
+            sub="10 题 · 评估斑块稳定性与干预依从性"
+          />
+          <ScaleRow
+            to="/questionnaires/$type"
+            params={{ type: "hypertension" }}
+            icon={Droplet}
+            tag="慢病管理"
+            title="高血压自我管理评估"
+            sub="8 题 · 评估血压控制与依从性"
+          />
         </div>
-      </div>
+      </section>
+
+      {/* 健康百科 */}
+      <section className="px-4">
+        <SectionTitle title="健康百科" sub="看完单篇得积分" extra="进入百科" />
+        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1">
+          {[
+            { tag: "视频", icon: PlayCircle, title: "斑块稳定的 5 个生活方式细节", meta: "张主任 · 4 分钟 · +50 积分" },
+            { tag: "图文", icon: BookOpen, title: "他汀类药物，到底要吃多久？", meta: "心内科药师 · 6 分钟 · +30 积分" },
+            { tag: "直播", icon: PlayCircle, title: "本周四 20:00 · 冠脉支架术后随访公开课", meta: "主任医师直播 · +80 积分" },
+          ].map((c) => {
+            const Icon = c.icon;
+            return (
+              <div key={c.title} className="w-[200px] shrink-0 overflow-hidden rounded-2xl bg-card shadow-card">
+                <div className="relative flex h-24 items-center justify-center bg-gradient-hero text-primary-foreground">
+                  <Icon className="h-9 w-9 opacity-90" />
+                  <span className="absolute left-2 top-2 rounded-full bg-black/30 px-2 py-0.5 text-[10px] backdrop-blur">
+                    {c.tag}
+                  </span>
+                </div>
+                <div className="p-3">
+                  <div className="line-clamp-2 text-[12px] font-semibold leading-snug">{c.title}</div>
+                  <div className="mt-1 text-[10px] text-muted-foreground">{c.meta}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 商城 */}
+      <section className="px-4">
+        <div className="overflow-hidden rounded-3xl bg-gradient-card p-4 shadow-card ring-1 ring-white/70">
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand text-primary-foreground">
+              <ShoppingBag className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[11px] text-brand-deep">医生甄选</div>
+              <div className="text-sm font-semibold">心安管家健康服务商城</div>
+            </div>
+          </div>
+          <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+            心内科医生 & 营养师联合甄选：低钠营养餐 · 心血管专病服务包 · 家用血压/血脂监测设备
+          </p>
+          <div className="mt-3 flex items-center justify-between">
+            <span className="text-[11px] text-muted-foreground">已为 8,326 位心友服务</span>
+            <button className="rounded-full bg-brand px-3 py-1.5 text-[11px] font-semibold text-primary-foreground">
+              进入商城
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <p className="px-4 text-center text-[10px] text-muted-foreground">
+        本应用建议仅供生活方式参考，不能替代医生诊疗
+      </p>
     </div>
   );
 }
 
-function QuickCard({ to, icon: Icon, title, desc }: { to: any; icon: any; title: string; desc: string }) {
+function Metric({ icon: Icon, label, value, unit, foot }: { icon: any; label: string; value: string; unit: string; foot: string }) {
   return (
-    <Link to={to} className="rounded-3xl bg-card p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-elev">
-      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft text-brand-deep"><Icon className="h-5 w-5" /></div>
-      <div className="mt-3 text-sm font-semibold">{title}</div>
-      <div className="mt-0.5 text-[11px] text-muted-foreground">{desc}</div>
+    <div className="rounded-2xl bg-card p-3 shadow-card">
+      <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+        <span>{label}</span>
+        <Icon className="h-3.5 w-3.5 text-brand" />
+      </div>
+      <div className="mt-1.5 flex items-baseline gap-1">
+        <span className="text-lg font-bold text-brand-deep leading-none">{value}</span>
+        <span className="text-[10px] text-muted-foreground">{unit}</span>
+      </div>
+      <div className="mt-1 text-[10px] text-emerald-600">{foot}</div>
+    </div>
+  );
+}
+
+function Quick({ to, icon: Icon, label }: { to: any; icon: any; label: string }) {
+  return (
+    <Link to={to} className="flex flex-col items-center gap-1.5 rounded-2xl bg-card py-3 shadow-card transition hover:-translate-y-0.5">
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand-deep">
+        <Icon className="h-4.5 w-4.5" />
+      </div>
+      <span className="text-[11px] font-medium">{label}</span>
+    </Link>
+  );
+}
+
+function Tag({ label, done }: { label: string; done?: boolean }) {
+  return (
+    <span className={
+      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 " +
+      (done ? "bg-brand-soft text-brand-deep" : "bg-muted text-muted-foreground")
+    }>
+      {done ? <CheckCircle2 className="h-2.5 w-2.5" /> : <Circle className="h-2.5 w-2.5" />}
+      {label}
+    </span>
+  );
+}
+
+function SectionTitle({ title, sub, extra, to }: { title: string; sub?: string; extra?: string; to?: any }) {
+  return (
+    <div className="mb-2 flex items-end justify-between">
+      <div>
+        <h2 className="text-[15px] font-bold">{title}</h2>
+        {sub && <div className="text-[11px] text-muted-foreground">{sub}</div>}
+      </div>
+      {extra && (
+        to ? (
+          <Link to={to} className="flex items-center text-[11px] text-brand">
+            {extra} <ChevronRight className="h-3 w-3" />
+          </Link>
+        ) : (
+          <span className="flex items-center text-[11px] text-brand">
+            {extra} <ChevronRight className="h-3 w-3" />
+          </span>
+        )
+      )}
+    </div>
+  );
+}
+
+function Todo({ icon: Icon, title, sub, cta }: { icon: any; title: string; sub: string; cta: string }) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card">
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand-deep">
+        <Icon className="h-4.5 w-4.5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-[13px] font-semibold">{title}</div>
+        <div className="text-[11px] text-muted-foreground">{sub}</div>
+      </div>
+      <button className="rounded-full bg-brand px-3 py-1 text-[11px] font-semibold text-primary-foreground">
+        {cta}
+      </button>
+    </div>
+  );
+}
+
+function ScaleRow({
+  to, params, icon: Icon, tag, title, sub,
+}: { to: any; params: any; icon: any; tag: string; title: string; sub: string }) {
+  return (
+    <Link to={to} params={params} className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-deep">
+        <Icon className="h-5 w-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-1.5">
+          <span className="rounded-full bg-brand/10 px-1.5 py-0.5 text-[10px] font-medium text-brand-deep">{tag}</span>
+          <span className="truncate text-[13px] font-semibold">{title}</span>
+        </div>
+        <div className="mt-0.5 truncate text-[11px] text-muted-foreground">{sub}</div>
+      </div>
+      <ChevronRight className="h-4 w-4 text-muted-foreground" />
     </Link>
   );
 }
