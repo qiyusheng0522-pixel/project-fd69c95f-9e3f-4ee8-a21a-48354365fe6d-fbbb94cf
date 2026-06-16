@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
+import { Route as AuthenticatedQuestionnairesRouteImport } from './routes/_authenticated/questionnaires'
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedRecordsUploadRouteImport } from './routes/_authenticated/records.upload'
@@ -37,6 +38,12 @@ const AuthenticatedRecordsRoute = AuthenticatedRecordsRouteImport.update({
   path: '/records',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedQuestionnairesRoute =
+  AuthenticatedQuestionnairesRouteImport.update({
+    id: '/questionnaires',
+    path: '/questionnaires',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPlanRoute = AuthenticatedPlanRouteImport.update({
   id: '/plan',
   path: '/plan',
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/plan': typeof AuthenticatedPlanRoute
+  '/questionnaires': typeof AuthenticatedQuestionnairesRoute
   '/records': typeof AuthenticatedRecordsRouteWithChildren
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
@@ -73,6 +81,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/plan': typeof AuthenticatedPlanRoute
+  '/questionnaires': typeof AuthenticatedQuestionnairesRoute
   '/records': typeof AuthenticatedRecordsRouteWithChildren
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
@@ -84,6 +93,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
+  '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRoute
   '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
   '/_authenticated/records/$id': typeof AuthenticatedRecordsIdRoute
   '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/home'
     | '/plan'
+    | '/questionnaires'
     | '/records'
     | '/records/$id'
     | '/records/upload'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/home'
     | '/plan'
+    | '/questionnaires'
     | '/records'
     | '/records/$id'
     | '/records/upload'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/home'
     | '/_authenticated/plan'
+    | '/_authenticated/questionnaires'
     | '/_authenticated/records'
     | '/_authenticated/records/$id'
     | '/_authenticated/records/upload'
@@ -153,6 +166,13 @@ declare module '@tanstack/react-router' {
       path: '/records'
       fullPath: '/records'
       preLoaderRoute: typeof AuthenticatedRecordsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/questionnaires': {
+      id: '/_authenticated/questionnaires'
+      path: '/questionnaires'
+      fullPath: '/questionnaires'
+      preLoaderRoute: typeof AuthenticatedQuestionnairesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/plan': {
@@ -202,12 +222,14 @@ const AuthenticatedRecordsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
+  AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRoute
   AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedPlanRoute: AuthenticatedPlanRoute,
+  AuthenticatedQuestionnairesRoute: AuthenticatedQuestionnairesRoute,
   AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
 }
 
