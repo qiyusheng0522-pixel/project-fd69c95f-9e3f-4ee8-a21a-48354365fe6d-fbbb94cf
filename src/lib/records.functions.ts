@@ -100,7 +100,7 @@ export const processRecordOcr = createServerFn({ method: "POST" })
         updates.visit_date = parsed.visit_date;
       }
 
-      await supabase.from("medical_records").update(updates).eq("id", data.recordId);
+      await supabase.from("medical_records").update(updates as never).eq("id", data.recordId);
       return { ok: true as const, structured: JSON.stringify(parsed) };
     } catch (e) {
       await supabase
