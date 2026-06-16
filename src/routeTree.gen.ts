@@ -18,6 +18,7 @@ import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/p
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedRecordsUploadRouteImport } from './routes/_authenticated/records.upload'
 import { Route as AuthenticatedRecordsIdRouteImport } from './routes/_authenticated/records.$id'
+import { Route as AuthenticatedQuestionnairesTypeRouteImport } from './routes/_authenticated/questionnaires.$type'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -65,14 +66,21 @@ const AuthenticatedRecordsIdRoute = AuthenticatedRecordsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedRecordsRoute,
 } as any)
+const AuthenticatedQuestionnairesTypeRoute =
+  AuthenticatedQuestionnairesTypeRouteImport.update({
+    id: '/$type',
+    path: '/$type',
+    getParentRoute: () => AuthenticatedQuestionnairesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/plan': typeof AuthenticatedPlanRoute
-  '/questionnaires': typeof AuthenticatedQuestionnairesRoute
+  '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
@@ -81,8 +89,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/plan': typeof AuthenticatedPlanRoute
-  '/questionnaires': typeof AuthenticatedQuestionnairesRoute
+  '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
@@ -93,8 +102,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
-  '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRoute
+  '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/_authenticated/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/_authenticated/records/$id': typeof AuthenticatedRecordsIdRoute
   '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/plan'
     | '/questionnaires'
     | '/records'
+    | '/questionnaires/$type'
     | '/records/$id'
     | '/records/upload'
   fileRoutesByTo: FileRoutesByTo
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/plan'
     | '/questionnaires'
     | '/records'
+    | '/questionnaires/$type'
     | '/records/$id'
     | '/records/upload'
   id:
@@ -128,6 +140,7 @@ export interface FileRouteTypes {
     | '/_authenticated/plan'
     | '/_authenticated/questionnaires'
     | '/_authenticated/records'
+    | '/_authenticated/questionnaires/$type'
     | '/_authenticated/records/$id'
     | '/_authenticated/records/upload'
   fileRoutesById: FileRoutesById
@@ -203,8 +216,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecordsIdRouteImport
       parentRoute: typeof AuthenticatedRecordsRoute
     }
+    '/_authenticated/questionnaires/$type': {
+      id: '/_authenticated/questionnaires/$type'
+      path: '/$type'
+      fullPath: '/questionnaires/$type'
+      preLoaderRoute: typeof AuthenticatedQuestionnairesTypeRouteImport
+      parentRoute: typeof AuthenticatedQuestionnairesRoute
+    }
   }
 }
+
+interface AuthenticatedQuestionnairesRouteChildren {
+  AuthenticatedQuestionnairesTypeRoute: typeof AuthenticatedQuestionnairesTypeRoute
+}
+
+const AuthenticatedQuestionnairesRouteChildren: AuthenticatedQuestionnairesRouteChildren =
+  {
+    AuthenticatedQuestionnairesTypeRoute: AuthenticatedQuestionnairesTypeRoute,
+  }
+
+const AuthenticatedQuestionnairesRouteWithChildren =
+  AuthenticatedQuestionnairesRoute._addFileChildren(
+    AuthenticatedQuestionnairesRouteChildren,
+  )
 
 interface AuthenticatedRecordsRouteChildren {
   AuthenticatedRecordsIdRoute: typeof AuthenticatedRecordsIdRoute
@@ -222,14 +256,15 @@ const AuthenticatedRecordsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
-  AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRoute
+  AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRouteWithChildren
   AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedPlanRoute: AuthenticatedPlanRoute,
-  AuthenticatedQuestionnairesRoute: AuthenticatedQuestionnairesRoute,
+  AuthenticatedQuestionnairesRoute:
+    AuthenticatedQuestionnairesRouteWithChildren,
   AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
 }
 
