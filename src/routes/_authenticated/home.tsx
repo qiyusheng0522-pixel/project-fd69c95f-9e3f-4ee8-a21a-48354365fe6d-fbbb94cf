@@ -46,6 +46,20 @@ function Home() {
       ((counts?.qs ?? 0) > 0 ? 20 : 0),
   );
 
+  // 今日行动：在「资料已上传」且「至少完成一份量表」后才生成
+  const hasRecords = (counts?.records ?? 0) > 0;
+  const hasQs = (counts?.qs ?? 0) > 0;
+  const hasMeds = (counts?.meds ?? 0) > 0;
+  const actionsReady = hasRecords && hasQs;
+  const todos: { icon: any; title: string; sub: string; cta: string }[] = [];
+  if (actionsReady) {
+    if (hasMeds) {
+      todos.push({ icon: Pill, title: "阿托伐他汀 20mg", sub: "20:00 · 睡前服用", cta: "确认" });
+    }
+    todos.push({ icon: Droplet, title: "晚间血压测量", sub: "未记录 · 目标 < 130/80", cta: "记录" });
+    todos.push({ icon: Camera, title: "晚餐饮食打卡", sub: "拍照识别 · 一键完成", cta: "打卡" });
+  }
+
   return (
     <div className="space-y-4 pb-6">
       {/* AI 主治医生卡片 */}
@@ -193,12 +207,46 @@ function Home() {
 
       {/* 今日行动 */}
       <section className="px-4">
-        <SectionTitle title="今日行动" extra="全部待办" to="/reminders" />
-        <div className="space-y-2">
-          <Todo icon={Pill} title="阿托伐他汀 20mg" sub="20:00 · 睡前服用" cta="确认" />
-          <Todo icon={Droplet} title="晚间血压测量" sub="未记录" cta="记录" />
-          <Todo icon={Camera} title="晚餐饮食打卡" sub="拍照识别 · 一键完成" cta="打卡" />
-        </div>
+        <SectionTitle
+          title="今日行动"
+          sub={actionsReady ? "基于你的档案与量表生成" : "完成档案 + 量表后自动生成"}
+          extra={actionsReady ? "全部待办" : undefined}
+          to={actionsReady ? "/reminders" : undefined}
+        />
+        {actionsReady ? (
+          <div className="space-y-2">
+            {todos.map((t) => (
+              <Todo key={t.title} icon={t.icon} title={t.title} sub={t.sub} cta={t.cta} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl bg-card p-4 shadow-card">
+            <div className="flex items-center gap-2 text-[12px] font-semibold text-brand-deep">
+              <Sparkles className="h-4 w-4" /> 解锁今日行动
+            </div>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
+              上传病历资料并完成至少 1 份专病量表，AI 将每天为你生成可执行的行动事项。
+            </p>
+            <div className="mt-3 space-y-2">
+              <UnlockStep
+                done={hasRecords}
+                icon={Camera}
+                title="上传基础资料"
+                sub={hasRecords ? `已上传 ${counts?.records ?? 0} 份资料` : "病历 / 化验单 / 入院单"}
+                to="/records/upload"
+                cta={hasRecords ? "继续上传" : "去上传"}
+              />
+              <UnlockStep
+                done={hasQs}
+                icon={ClipboardList}
+                title="完成专病量表"
+                sub={hasQs ? `已完成 ${counts?.qs ?? 0} 份评估` : "SCVD / 斑块 / 高血压…任选 1 份"}
+                to="/questionnaires"
+                cta={hasQs ? "继续评估" : "去填写"}
+              />
+            </div>
+          </div>
+        )}
       </section>
 
       {/* 我的方案 */}
@@ -391,6 +439,31 @@ function Todo({ icon: Icon, title, sub, cta }: { icon: any; title: string; sub: 
         {cta}
       </button>
     </div>
+  );
+}
+
+function UnlockStep({
+  done, icon: Icon, title, sub, to, cta,
+}: { done: boolean; icon: any; title: string; sub: string; to: any; cta: string }) {
+  return (
+    <Link to={to} className="flex items-center gap-3 rounded-2xl bg-muted/40 p-2.5">
+      <div className={
+        "flex h-8 w-8 items-center justify-center rounded-xl " +
+        (done ? "bg-emerald-100 text-emerald-600" : "bg-brand-soft text-brand-deep")
+      }>
+        {done ? <CheckCircle2 className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-[12px] font-semibold">{title}</div>
+        <div className="text-[10px] text-muted-foreground">{sub}</div>
+      </div>
+      <span className={
+        "rounded-full px-2.5 py-1 text-[10px] font-semibold " +
+        (done ? "bg-emerald-500/15 text-emerald-700" : "bg-brand text-primary-foreground")
+      }>
+        {done ? "已完成" : cta}
+      </span>
+    </Link>
   );
 }
 
