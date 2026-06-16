@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedRecordsUploadRouteImport } from './routes/_authenticated/records.upload'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -39,18 +40,26 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRecordsUploadRoute =
+  AuthenticatedRecordsUploadRouteImport.update({
+    id: '/upload',
+    path: '/upload',
+    getParentRoute: () => AuthenticatedRecordsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/records': typeof AuthenticatedRecordsRoute
+  '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/records': typeof AuthenticatedRecordsRoute
+  '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,13 +67,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
-  '/_authenticated/records': typeof AuthenticatedRecordsRoute
+  '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/records'
+  fullPaths: '/' | '/auth' | '/home' | '/records' | '/records/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/records'
+  to: '/' | '/auth' | '/home' | '/records' | '/records/upload'
   id:
     | '__root__'
     | '/'
@@ -72,6 +82,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/home'
     | '/_authenticated/records'
+    | '/_authenticated/records/upload'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,17 +128,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/records/upload': {
+      id: '/_authenticated/records/upload'
+      path: '/upload'
+      fullPath: '/records/upload'
+      preLoaderRoute: typeof AuthenticatedRecordsUploadRouteImport
+      parentRoute: typeof AuthenticatedRecordsRoute
+    }
   }
 }
 
+interface AuthenticatedRecordsRouteChildren {
+  AuthenticatedRecordsUploadRoute: typeof AuthenticatedRecordsUploadRoute
+}
+
+const AuthenticatedRecordsRouteChildren: AuthenticatedRecordsRouteChildren = {
+  AuthenticatedRecordsUploadRoute: AuthenticatedRecordsUploadRoute,
+}
+
+const AuthenticatedRecordsRouteWithChildren =
+  AuthenticatedRecordsRoute._addFileChildren(AuthenticatedRecordsRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
-  AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRoute
+  AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
-  AuthenticatedRecordsRoute: AuthenticatedRecordsRoute,
+  AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
