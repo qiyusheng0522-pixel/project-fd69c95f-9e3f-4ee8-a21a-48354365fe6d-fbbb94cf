@@ -168,7 +168,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </label>
   );
 }
-function Input({ value, onChange, ...rest }: { value: string; onChange: (v: string) => void } & React.InputHTMLAttributes<HTMLInputElement>) {
+function Input({ value, onChange, ...rest }: { value: string; onChange: (v: string) => void } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">) {
   return (
     <input
       {...rest}
