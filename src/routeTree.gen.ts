@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
 import { Route as AuthenticatedQuestionnairesRouteImport } from './routes/_authenticated/questionnaires'
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
@@ -34,6 +35,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRemindersRoute = AuthenticatedRemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRecordsRoute = AuthenticatedRecordsRouteImport.update({
   id: '/records',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/plan': typeof AuthenticatedPlanRoute
   '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/reminders': typeof AuthenticatedRemindersRoute
   '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/plan': typeof AuthenticatedPlanRoute
   '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/reminders': typeof AuthenticatedRemindersRoute
   '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
   '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
   '/_authenticated/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/_authenticated/records/$id': typeof AuthenticatedRecordsIdRoute
   '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/plan'
     | '/questionnaires'
     | '/records'
+    | '/reminders'
     | '/questionnaires/$type'
     | '/records/$id'
     | '/records/upload'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/plan'
     | '/questionnaires'
     | '/records'
+    | '/reminders'
     | '/questionnaires/$type'
     | '/records/$id'
     | '/records/upload'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/_authenticated/plan'
     | '/_authenticated/questionnaires'
     | '/_authenticated/records'
+    | '/_authenticated/reminders'
     | '/_authenticated/questionnaires/$type'
     | '/_authenticated/records/$id'
     | '/_authenticated/records/upload'
@@ -185,6 +197,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/reminders': {
+      id: '/_authenticated/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof AuthenticatedRemindersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/records': {
       id: '/_authenticated/records'
@@ -278,6 +297,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
   AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRouteWithChildren
   AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
+  AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -287,6 +307,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedQuestionnairesRoute:
     AuthenticatedQuestionnairesRouteWithChildren,
   AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
+  AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
