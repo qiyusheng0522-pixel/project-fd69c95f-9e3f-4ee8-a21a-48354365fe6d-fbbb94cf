@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
 import { Route as AuthenticatedQuestionnairesRouteImport } from './routes/_authenticated/questionnaires'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedArchiveRouteImport } from './routes/_authenticated/archive'
@@ -52,6 +53,11 @@ const AuthenticatedQuestionnairesRoute =
     path: '/questionnaires',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPlanRoute = AuthenticatedPlanRouteImport.update({
   id: '/plan',
   path: '/plan',
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/archive': typeof AuthenticatedArchiveRoute
   '/home': typeof AuthenticatedHomeRoute
   '/plan': typeof AuthenticatedPlanRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
   '/reminders': typeof AuthenticatedRemindersRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/archive': typeof AuthenticatedArchiveRoute
   '/home': typeof AuthenticatedHomeRoute
   '/plan': typeof AuthenticatedPlanRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
   '/reminders': typeof AuthenticatedRemindersRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/_authenticated/archive': typeof AuthenticatedArchiveRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
   '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/archive'
     | '/home'
     | '/plan'
+    | '/profile'
     | '/questionnaires'
     | '/records'
     | '/reminders'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/archive'
     | '/home'
     | '/plan'
+    | '/profile'
     | '/questionnaires'
     | '/records'
     | '/reminders'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/_authenticated/archive'
     | '/_authenticated/home'
     | '/_authenticated/plan'
+    | '/_authenticated/profile'
     | '/_authenticated/questionnaires'
     | '/_authenticated/records'
     | '/_authenticated/reminders'
@@ -217,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/questionnaires'
       fullPath: '/questionnaires'
       preLoaderRoute: typeof AuthenticatedQuestionnairesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/plan': {
@@ -295,6 +314,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedArchiveRoute: typeof AuthenticatedArchiveRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRouteWithChildren
   AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
   AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
@@ -304,6 +324,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedArchiveRoute: AuthenticatedArchiveRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedPlanRoute: AuthenticatedPlanRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedQuestionnairesRoute:
     AuthenticatedQuestionnairesRouteWithChildren,
   AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
