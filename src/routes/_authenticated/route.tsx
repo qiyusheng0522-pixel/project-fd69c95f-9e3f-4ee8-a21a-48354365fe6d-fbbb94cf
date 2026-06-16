@@ -14,10 +14,10 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="mx-auto max-w-xl">
+    <div className="flex min-h-full flex-col bg-background">
+      <main className="flex-1">
         <Outlet />
-      </div>
+      </main>
       <BottomNav />
     </div>
   );
