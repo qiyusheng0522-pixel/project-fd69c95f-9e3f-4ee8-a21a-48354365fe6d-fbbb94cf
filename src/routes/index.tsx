@@ -1,5 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { HeartPulse, ScanLine, ClipboardList, Sparkles, ShieldCheck, Bell } from "lucide-react";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -9,15 +8,13 @@ export const Route = createFileRoute("/")({
         name: "description",
         content: "省人民医院心血管科患者端：拍照录入病历、化验单与手术报告，结合专病量表 AI 生成个性化健康管理方案。",
       },
-      { property: "og:title", content: "心安管家 · 心血管全病程管理" },
-      { property: "og:description", content: "拍照上传病历，AI 量身定制饮食、运动、用药与随访方案。" },
     ],
   }),
-  component: Landing,
+  beforeLoad: () => {
+    throw redirect({ to: "/home" });
+  },
+  component: () => null,
 });
-
-function Landing() {
-  return (
     <div className="min-h-screen bg-background">
       <section className="bg-gradient-hero text-primary-foreground">
         <div className="mx-auto max-w-5xl px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
