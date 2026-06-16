@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedRecordsUploadRouteImport } from './routes/_authenticated/records.upload'
+import { Route as AuthenticatedRecordsIdRouteImport } from './routes/_authenticated/records.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -46,12 +47,18 @@ const AuthenticatedRecordsUploadRoute =
     path: '/upload',
     getParentRoute: () => AuthenticatedRecordsRoute,
   } as any)
+const AuthenticatedRecordsIdRoute = AuthenticatedRecordsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedRecordsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRoutesByTo {
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRoutesById {
@@ -68,13 +76,20 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/_authenticated/records/$id': typeof AuthenticatedRecordsIdRoute
   '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/records' | '/records/upload'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/records'
+    | '/records/$id'
+    | '/records/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/records' | '/records/upload'
+  to: '/' | '/auth' | '/home' | '/records' | '/records/$id' | '/records/upload'
   id:
     | '__root__'
     | '/'
@@ -82,6 +97,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/home'
     | '/_authenticated/records'
+    | '/_authenticated/records/$id'
     | '/_authenticated/records/upload'
   fileRoutesById: FileRoutesById
 }
@@ -135,14 +151,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecordsUploadRouteImport
       parentRoute: typeof AuthenticatedRecordsRoute
     }
+    '/_authenticated/records/$id': {
+      id: '/_authenticated/records/$id'
+      path: '/$id'
+      fullPath: '/records/$id'
+      preLoaderRoute: typeof AuthenticatedRecordsIdRouteImport
+      parentRoute: typeof AuthenticatedRecordsRoute
+    }
   }
 }
 
 interface AuthenticatedRecordsRouteChildren {
+  AuthenticatedRecordsIdRoute: typeof AuthenticatedRecordsIdRoute
   AuthenticatedRecordsUploadRoute: typeof AuthenticatedRecordsUploadRoute
 }
 
 const AuthenticatedRecordsRouteChildren: AuthenticatedRecordsRouteChildren = {
+  AuthenticatedRecordsIdRoute: AuthenticatedRecordsIdRoute,
   AuthenticatedRecordsUploadRoute: AuthenticatedRecordsUploadRoute,
 }
 
