@@ -14,7 +14,7 @@ export function PageHeader({
   right?: ReactNode;
 }) {
   return (
-    <header className="sticky top-0 z-30 -mx-0 border-b border-border bg-card/80 px-4 py-3 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-border/60 bg-card/85 px-4 py-3 backdrop-blur-xl">
       <div className="flex items-center gap-2">
         {back ? (
           <Link
