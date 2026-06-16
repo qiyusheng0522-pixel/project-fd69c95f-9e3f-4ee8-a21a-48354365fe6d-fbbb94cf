@@ -12,7 +12,16 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
+import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
+import { Route as AuthenticatedQuestionnairesRouteImport } from './routes/_authenticated/questionnaires'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedArchiveRouteImport } from './routes/_authenticated/archive'
+import { Route as AuthenticatedRecordsUploadRouteImport } from './routes/_authenticated/records.upload'
+import { Route as AuthenticatedRecordsIdRouteImport } from './routes/_authenticated/records.$id'
+import { Route as AuthenticatedQuestionnairesTypeRouteImport } from './routes/_authenticated/questionnaires.$type'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -28,35 +37,148 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRemindersRoute = AuthenticatedRemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRecordsRoute = AuthenticatedRecordsRouteImport.update({
+  id: '/records',
+  path: '/records',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedQuestionnairesRoute =
+  AuthenticatedQuestionnairesRouteImport.update({
+    id: '/questionnaires',
+    path: '/questionnaires',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPlanRoute = AuthenticatedPlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedArchiveRoute = AuthenticatedArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRecordsUploadRoute =
+  AuthenticatedRecordsUploadRouteImport.update({
+    id: '/upload',
+    path: '/upload',
+    getParentRoute: () => AuthenticatedRecordsRoute,
+  } as any)
+const AuthenticatedRecordsIdRoute = AuthenticatedRecordsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedRecordsRoute,
+} as any)
+const AuthenticatedQuestionnairesTypeRoute =
+  AuthenticatedQuestionnairesTypeRouteImport.update({
+    id: '/$type',
+    path: '/$type',
+    getParentRoute: () => AuthenticatedQuestionnairesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/archive': typeof AuthenticatedArchiveRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/plan': typeof AuthenticatedPlanRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
+  '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/reminders': typeof AuthenticatedRemindersRoute
+  '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
+  '/records/$id': typeof AuthenticatedRecordsIdRoute
+  '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/archive': typeof AuthenticatedArchiveRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/plan': typeof AuthenticatedPlanRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
+  '/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/reminders': typeof AuthenticatedRemindersRoute
+  '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
+  '/records/$id': typeof AuthenticatedRecordsIdRoute
+  '/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/archive': typeof AuthenticatedArchiveRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/plan': typeof AuthenticatedPlanRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
+  '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
+  '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
+  '/_authenticated/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
+  '/_authenticated/records/$id': typeof AuthenticatedRecordsIdRoute
+  '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/archive'
+    | '/home'
+    | '/plan'
+    | '/profile'
+    | '/questionnaires'
+    | '/records'
+    | '/reminders'
+    | '/questionnaires/$type'
+    | '/records/$id'
+    | '/records/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/home'
+  to:
+    | '/'
+    | '/auth'
+    | '/archive'
+    | '/home'
+    | '/plan'
+    | '/profile'
+    | '/questionnaires'
+    | '/records'
+    | '/reminders'
+    | '/questionnaires/$type'
+    | '/records/$id'
+    | '/records/upload'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/archive'
+    | '/_authenticated/home'
+    | '/_authenticated/plan'
+    | '/_authenticated/profile'
+    | '/_authenticated/questionnaires'
+    | '/_authenticated/records'
+    | '/_authenticated/reminders'
+    | '/_authenticated/questionnaires/$type'
+    | '/_authenticated/records/$id'
+    | '/_authenticated/records/upload'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,6 +210,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/reminders': {
+      id: '/_authenticated/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof AuthenticatedRemindersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/records': {
+      id: '/_authenticated/records'
+      path: '/records'
+      fullPath: '/records'
+      preLoaderRoute: typeof AuthenticatedRecordsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/questionnaires': {
+      id: '/_authenticated/questionnaires'
+      path: '/questionnaires'
+      fullPath: '/questionnaires'
+      preLoaderRoute: typeof AuthenticatedQuestionnairesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/plan': {
+      id: '/_authenticated/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof AuthenticatedPlanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/home': {
       id: '/_authenticated/home'
       path: '/home'
@@ -95,15 +252,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/archive': {
+      id: '/_authenticated/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof AuthenticatedArchiveRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/records/upload': {
+      id: '/_authenticated/records/upload'
+      path: '/upload'
+      fullPath: '/records/upload'
+      preLoaderRoute: typeof AuthenticatedRecordsUploadRouteImport
+      parentRoute: typeof AuthenticatedRecordsRoute
+    }
+    '/_authenticated/records/$id': {
+      id: '/_authenticated/records/$id'
+      path: '/$id'
+      fullPath: '/records/$id'
+      preLoaderRoute: typeof AuthenticatedRecordsIdRouteImport
+      parentRoute: typeof AuthenticatedRecordsRoute
+    }
+    '/_authenticated/questionnaires/$type': {
+      id: '/_authenticated/questionnaires/$type'
+      path: '/$type'
+      fullPath: '/questionnaires/$type'
+      preLoaderRoute: typeof AuthenticatedQuestionnairesTypeRouteImport
+      parentRoute: typeof AuthenticatedQuestionnairesRoute
+    }
   }
 }
 
+interface AuthenticatedQuestionnairesRouteChildren {
+  AuthenticatedQuestionnairesTypeRoute: typeof AuthenticatedQuestionnairesTypeRoute
+}
+
+const AuthenticatedQuestionnairesRouteChildren: AuthenticatedQuestionnairesRouteChildren =
+  {
+    AuthenticatedQuestionnairesTypeRoute: AuthenticatedQuestionnairesTypeRoute,
+  }
+
+const AuthenticatedQuestionnairesRouteWithChildren =
+  AuthenticatedQuestionnairesRoute._addFileChildren(
+    AuthenticatedQuestionnairesRouteChildren,
+  )
+
+interface AuthenticatedRecordsRouteChildren {
+  AuthenticatedRecordsIdRoute: typeof AuthenticatedRecordsIdRoute
+  AuthenticatedRecordsUploadRoute: typeof AuthenticatedRecordsUploadRoute
+}
+
+const AuthenticatedRecordsRouteChildren: AuthenticatedRecordsRouteChildren = {
+  AuthenticatedRecordsIdRoute: AuthenticatedRecordsIdRoute,
+  AuthenticatedRecordsUploadRoute: AuthenticatedRecordsUploadRoute,
+}
+
+const AuthenticatedRecordsRouteWithChildren =
+  AuthenticatedRecordsRoute._addFileChildren(AuthenticatedRecordsRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedArchiveRoute: typeof AuthenticatedArchiveRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRouteWithChildren
+  AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
+  AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedArchiveRoute: AuthenticatedArchiveRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedPlanRoute: AuthenticatedPlanRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedQuestionnairesRoute:
+    AuthenticatedQuestionnairesRouteWithChildren,
+  AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
+  AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
