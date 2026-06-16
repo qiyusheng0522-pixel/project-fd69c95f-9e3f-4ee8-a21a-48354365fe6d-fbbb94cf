@@ -12,7 +12,7 @@ const items = [
 export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <nav className="fixed bottom-0 left-1/2 z-40 -translate-x-1/2 w-full max-w-xl border-t border-border bg-card/95 backdrop-blur-xl">
+    <nav className="sticky bottom-0 z-40 w-full border-t border-border bg-card/95 backdrop-blur-xl">
       <ul className="grid grid-cols-5">
         {items.map(({ to, label, icon: Icon }) => {
           const active = pathname === to || pathname.startsWith(to + "/");
