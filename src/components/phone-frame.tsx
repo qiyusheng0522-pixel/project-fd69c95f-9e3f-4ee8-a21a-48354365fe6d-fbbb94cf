@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
  */
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen w-full bg-[radial-gradient(1200px_600px_at_50%_-10%,hsl(var(--brand)/0.18),transparent_60%),linear-gradient(180deg,#eef2f7,#dde4ee)] md:flex md:items-center md:justify-center md:p-8">
+    <div className="min-h-screen w-full bg-[radial-gradient(900px_500px_at_50%_-10%,rgba(96,141,231,0.22),transparent_60%),linear-gradient(180deg,#eef4fb,#dbe5f1)] md:flex md:items-center md:justify-center md:p-8">
       {/* 设备外壳 */}
       <div className="relative mx-auto h-screen w-full bg-background md:h-[844px] md:w-[390px] md:rounded-[3rem] md:p-[14px] md:bg-slate-900 md:shadow-[0_40px_90px_-30px_rgba(15,23,42,0.55),0_0_0_2px_rgba(255,255,255,0.06)_inset]">
         {/* 屏幕区 */}
