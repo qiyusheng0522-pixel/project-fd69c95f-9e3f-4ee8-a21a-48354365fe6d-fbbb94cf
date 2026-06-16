@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSpecialtyRouteImport } from './routes/_authenticated/specialty'
 import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
 import { Route as AuthenticatedQuestionnairesRouteImport } from './routes/_authenticated/questionnaires'
@@ -19,6 +20,8 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedArchiveRouteImport } from './routes/_authenticated/archive'
+import { Route as AuthenticatedSpecialtyScvdRouteImport } from './routes/_authenticated/specialty.scvd'
+import { Route as AuthenticatedSpecialtyPlaqueRouteImport } from './routes/_authenticated/specialty.plaque'
 import { Route as AuthenticatedRecordsUploadRouteImport } from './routes/_authenticated/records.upload'
 import { Route as AuthenticatedRecordsIdRouteImport } from './routes/_authenticated/records.$id'
 import { Route as AuthenticatedQuestionnairesTypeRouteImport } from './routes/_authenticated/questionnaires.$type'
@@ -36,6 +39,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSpecialtyRoute = AuthenticatedSpecialtyRouteImport.update({
+  id: '/specialty',
+  path: '/specialty',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRemindersRoute = AuthenticatedRemindersRouteImport.update({
   id: '/reminders',
@@ -73,6 +81,18 @@ const AuthenticatedArchiveRoute = AuthenticatedArchiveRouteImport.update({
   path: '/archive',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSpecialtyScvdRoute =
+  AuthenticatedSpecialtyScvdRouteImport.update({
+    id: '/scvd',
+    path: '/scvd',
+    getParentRoute: () => AuthenticatedSpecialtyRoute,
+  } as any)
+const AuthenticatedSpecialtyPlaqueRoute =
+  AuthenticatedSpecialtyPlaqueRouteImport.update({
+    id: '/plaque',
+    path: '/plaque',
+    getParentRoute: () => AuthenticatedSpecialtyRoute,
+  } as any)
 const AuthenticatedRecordsUploadRoute =
   AuthenticatedRecordsUploadRouteImport.update({
     id: '/upload',
@@ -101,9 +121,12 @@ export interface FileRoutesByFullPath {
   '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
   '/reminders': typeof AuthenticatedRemindersRoute
+  '/specialty': typeof AuthenticatedSpecialtyRouteWithChildren
   '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
+  '/specialty/plaque': typeof AuthenticatedSpecialtyPlaqueRoute
+  '/specialty/scvd': typeof AuthenticatedSpecialtyScvdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -115,9 +138,12 @@ export interface FileRoutesByTo {
   '/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/records': typeof AuthenticatedRecordsRouteWithChildren
   '/reminders': typeof AuthenticatedRemindersRoute
+  '/specialty': typeof AuthenticatedSpecialtyRouteWithChildren
   '/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/records/$id': typeof AuthenticatedRecordsIdRoute
   '/records/upload': typeof AuthenticatedRecordsUploadRoute
+  '/specialty/plaque': typeof AuthenticatedSpecialtyPlaqueRoute
+  '/specialty/scvd': typeof AuthenticatedSpecialtyScvdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -131,9 +157,12 @@ export interface FileRoutesById {
   '/_authenticated/questionnaires': typeof AuthenticatedQuestionnairesRouteWithChildren
   '/_authenticated/records': typeof AuthenticatedRecordsRouteWithChildren
   '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
+  '/_authenticated/specialty': typeof AuthenticatedSpecialtyRouteWithChildren
   '/_authenticated/questionnaires/$type': typeof AuthenticatedQuestionnairesTypeRoute
   '/_authenticated/records/$id': typeof AuthenticatedRecordsIdRoute
   '/_authenticated/records/upload': typeof AuthenticatedRecordsUploadRoute
+  '/_authenticated/specialty/plaque': typeof AuthenticatedSpecialtyPlaqueRoute
+  '/_authenticated/specialty/scvd': typeof AuthenticatedSpecialtyScvdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -147,9 +176,12 @@ export interface FileRouteTypes {
     | '/questionnaires'
     | '/records'
     | '/reminders'
+    | '/specialty'
     | '/questionnaires/$type'
     | '/records/$id'
     | '/records/upload'
+    | '/specialty/plaque'
+    | '/specialty/scvd'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -161,9 +193,12 @@ export interface FileRouteTypes {
     | '/questionnaires'
     | '/records'
     | '/reminders'
+    | '/specialty'
     | '/questionnaires/$type'
     | '/records/$id'
     | '/records/upload'
+    | '/specialty/plaque'
+    | '/specialty/scvd'
   id:
     | '__root__'
     | '/'
@@ -176,9 +211,12 @@ export interface FileRouteTypes {
     | '/_authenticated/questionnaires'
     | '/_authenticated/records'
     | '/_authenticated/reminders'
+    | '/_authenticated/specialty'
     | '/_authenticated/questionnaires/$type'
     | '/_authenticated/records/$id'
     | '/_authenticated/records/upload'
+    | '/_authenticated/specialty/plaque'
+    | '/_authenticated/specialty/scvd'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -209,6 +247,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/specialty': {
+      id: '/_authenticated/specialty'
+      path: '/specialty'
+      fullPath: '/specialty'
+      preLoaderRoute: typeof AuthenticatedSpecialtyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/reminders': {
       id: '/_authenticated/reminders'
@@ -258,6 +303,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/archive'
       preLoaderRoute: typeof AuthenticatedArchiveRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/specialty/scvd': {
+      id: '/_authenticated/specialty/scvd'
+      path: '/scvd'
+      fullPath: '/specialty/scvd'
+      preLoaderRoute: typeof AuthenticatedSpecialtyScvdRouteImport
+      parentRoute: typeof AuthenticatedSpecialtyRoute
+    }
+    '/_authenticated/specialty/plaque': {
+      id: '/_authenticated/specialty/plaque'
+      path: '/plaque'
+      fullPath: '/specialty/plaque'
+      preLoaderRoute: typeof AuthenticatedSpecialtyPlaqueRouteImport
+      parentRoute: typeof AuthenticatedSpecialtyRoute
     }
     '/_authenticated/records/upload': {
       id: '/_authenticated/records/upload'
@@ -310,6 +369,22 @@ const AuthenticatedRecordsRouteChildren: AuthenticatedRecordsRouteChildren = {
 const AuthenticatedRecordsRouteWithChildren =
   AuthenticatedRecordsRoute._addFileChildren(AuthenticatedRecordsRouteChildren)
 
+interface AuthenticatedSpecialtyRouteChildren {
+  AuthenticatedSpecialtyPlaqueRoute: typeof AuthenticatedSpecialtyPlaqueRoute
+  AuthenticatedSpecialtyScvdRoute: typeof AuthenticatedSpecialtyScvdRoute
+}
+
+const AuthenticatedSpecialtyRouteChildren: AuthenticatedSpecialtyRouteChildren =
+  {
+    AuthenticatedSpecialtyPlaqueRoute: AuthenticatedSpecialtyPlaqueRoute,
+    AuthenticatedSpecialtyScvdRoute: AuthenticatedSpecialtyScvdRoute,
+  }
+
+const AuthenticatedSpecialtyRouteWithChildren =
+  AuthenticatedSpecialtyRoute._addFileChildren(
+    AuthenticatedSpecialtyRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedArchiveRoute: typeof AuthenticatedArchiveRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
@@ -318,6 +393,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedQuestionnairesRoute: typeof AuthenticatedQuestionnairesRouteWithChildren
   AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRouteWithChildren
   AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
+  AuthenticatedSpecialtyRoute: typeof AuthenticatedSpecialtyRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -329,6 +405,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedQuestionnairesRouteWithChildren,
   AuthenticatedRecordsRoute: AuthenticatedRecordsRouteWithChildren,
   AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
+  AuthenticatedSpecialtyRoute: AuthenticatedSpecialtyRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
