@@ -80,7 +80,7 @@ export const processRecordOcr = createServerFn({ method: "POST" })
         ],
       });
 
-      let parsed: Record<string, unknown> = {};
+      let parsed: Record<string, any> = {};
       const cleaned = text.trim().replace(/^```json\s*|\s*```$/g, "");
       try {
         parsed = JSON.parse(cleaned);
@@ -88,7 +88,7 @@ export const processRecordOcr = createServerFn({ method: "POST" })
         parsed = { raw_text: text };
       }
 
-      const updates: Record<string, unknown> = {
+      const updates: Record<string, any> = {
         ocr_text: typeof parsed.raw_text === "string" ? parsed.raw_text : text,
         structured_data: parsed,
         status: "completed",
@@ -101,7 +101,7 @@ export const processRecordOcr = createServerFn({ method: "POST" })
       }
 
       await supabase.from("medical_records").update(updates).eq("id", data.recordId);
-      return { ok: true, structured: parsed };
+      return { ok: true as const, structured: JSON.stringify(parsed) };
     } catch (e) {
       await supabase
         .from("medical_records")
