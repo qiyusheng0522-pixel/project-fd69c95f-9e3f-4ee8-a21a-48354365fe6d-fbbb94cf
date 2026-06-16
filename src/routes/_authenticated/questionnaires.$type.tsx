@@ -87,6 +87,36 @@ const FORMS: Record<string, { title: string; questions: Q[] }> = {
       { id: "l12", text: "有亲友支持", options: YN },
     ],
   },
+  scvd: {
+    title: "亚临床心血管病 (SCVD) 风险筛查",
+    questions: [
+      { id: "s1", text: "年龄 ≥ 55 岁（男）或 ≥ 65 岁（女）", options: YN },
+      { id: "s2", text: "直系亲属早发冠心病/卒中病史", options: YN },
+      { id: "s3", text: "目前吸烟或戒烟 < 1 年", options: YN },
+      { id: "s4", text: "高血压（已确诊或近期 ≥ 140/90 mmHg）", options: YN },
+      { id: "s5", text: "糖尿病或空腹血糖 ≥ 6.1 mmol/L", options: YN },
+      { id: "s6", text: "LDL-C ≥ 3.4 mmol/L 或正在服用他汀", options: YN },
+      { id: "s7", text: "腹型肥胖（男腰围 ≥ 90cm / 女 ≥ 85cm）", options: YN },
+      { id: "s8", text: "久坐 ≥ 6 小时/日，缺乏规律运动", options: FOUR },
+      { id: "s9", text: "近 3 个月有不明原因乏力 / 活动耐量下降", options: FOUR },
+      { id: "s10", text: "曾行颈动脉超声/冠脉 CT 提示 IMT 增厚或钙化", options: YN },
+    ],
+  },
+  plaque: {
+    title: "颈动脉 / 冠脉斑块管理评估",
+    questions: [
+      { id: "p1", text: "已通过影像确诊存在斑块（颈动脉/冠脉）", options: YN },
+      { id: "p2", text: "最新报告提示斑块为软斑 / 混合斑", options: YN },
+      { id: "p3", text: "管腔狭窄程度 ≥ 50%", options: YN },
+      { id: "p4", text: "LDL-C 已达标（< 1.8 mmol/L 或较基线↓50%）", options: YN },
+      { id: "p5", text: "规律服用他汀 / 抗血小板药物", options: FOUR },
+      { id: "p6", text: "血压稳定控制在 < 130/80 mmHg", options: FOUR },
+      { id: "p7", text: "近期出现胸闷 / 短暂性脑缺血症状", options: FOUR },
+      { id: "p8", text: "饮食已转向低饱和脂肪 / 地中海模式", options: FOUR },
+      { id: "p9", text: "每周有氧运动 ≥ 150 分钟", options: FOUR },
+      { id: "p10", text: "每 6-12 月复查颈动脉超声 / 冠脉影像", options: YN },
+    ],
+  },
 };
 
 function QuestionnaireForm() {
