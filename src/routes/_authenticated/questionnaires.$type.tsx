@@ -223,6 +223,18 @@ function interpret(type: string, score: number, total: number) {
     if (score >= total * 0.5) return "生活方式中等，仍有改善空间";
     return "生活方式风险偏高，建议结合方案改进";
   }
+  if (type === "scvd") {
+    if (score >= 6) return "亚临床心血管病高风险，建议尽快完善颈动脉超声 / 冠脉 CT";
+    if (score >= 3) return "中等风险，建议加强生活方式干预并定期监测";
+    return "暂为低风险，建议每年常规筛查";
+  }
+  if (type === "plaque") {
+    const max = total * 3;
+    const pct = score / max;
+    if (pct >= 0.6) return "斑块管理良好，继续维持并按期复查";
+    if (pct >= 0.3) return "管理一般，需加强药物依从性与生活方式";
+    return "管理较差，强烈建议门诊复诊调整方案";
+  }
   const max = total * 3;
   const pct = score / max;
   if (type === "hypertension") {
