@@ -33,45 +33,47 @@ function Home() {
 
   return (
     <div>
-      <header className="bg-gradient-hero px-5 pb-8 pt-10 text-primary-foreground">
-        <p className="text-xs text-white/80">省人民医院 · 心血管科</p>
-        <h1 className="mt-1 text-2xl font-bold">您好，{profile?.full_name || "朋友"}</h1>
+      <header className="relative overflow-hidden bg-gradient-hero px-5 pb-10 pt-10 text-primary-foreground">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-2xl" />
+        <div className="pointer-events-none absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+        <p className="text-xs text-white/85">省人民医院 · 心血管科</p>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight">您好，{profile?.full_name || "朋友"}</h1>
         <p className="mt-1 text-sm text-white/85">今天也要好好照顾自己的心 ❤</p>
-        <div className="mt-5 grid grid-cols-4 gap-3 text-center">
+        <div className="relative mt-6 grid grid-cols-4 gap-2 text-center">
           {[
             { label: "病历", value: counts?.records ?? 0 },
             { label: "量表", value: counts?.qs ?? 0 },
             { label: "方案", value: counts?.plans ?? 0 },
             { label: "用药", value: counts?.meds ?? 0 },
           ].map((s) => (
-            <div key={s.label} className="rounded-2xl bg-white/15 px-2 py-3 backdrop-blur">
-              <div className="text-lg font-semibold">{s.value}</div>
-              <div className="mt-0.5 text-[11px] text-white/80">{s.label}</div>
+            <div key={s.label} className="rounded-2xl bg-white/18 px-2 py-3 backdrop-blur-md ring-1 ring-white/15">
+              <div className="text-lg font-semibold leading-none">{s.value}</div>
+              <div className="mt-1 text-[11px] text-white/85">{s.label}</div>
             </div>
           ))}
         </div>
       </header>
-      <div className="space-y-4 px-4 py-5">
-        <Link to="/records/upload" className="flex items-center gap-3 rounded-2xl bg-card p-4 shadow-card hover:shadow-elev transition">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand text-primary-foreground"><Camera className="h-6 w-6" /></div>
+      <div className="-mt-5 space-y-4 px-4 pb-6">
+        <Link to="/records/upload" className="flex items-center gap-3 rounded-3xl bg-card p-4 shadow-elev transition hover:-translate-y-0.5">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-hero text-primary-foreground shadow-card"><Camera className="h-6 w-6" /></div>
           <div className="flex-1">
-            <div className="font-semibold">拍照录入病历</div>
-            <div className="text-xs text-muted-foreground">化验单 · 入院单 · 手术报告，OCR 一键识别</div>
+            <div className="text-sm font-semibold">拍照录入病历</div>
+            <div className="mt-0.5 text-[11px] text-muted-foreground">化验单 · 入院单 · 手术报告，OCR 一键识别</div>
           </div>
           <ChevronRight className="h-5 w-5 text-muted-foreground" />
         </Link>
-        <div className="rounded-2xl bg-gradient-card p-4 shadow-card">
+        <div className="rounded-3xl bg-gradient-card p-4 shadow-card ring-1 ring-white/60">
           <div className="flex items-center gap-2 text-sm font-semibold text-brand-deep"><Sparkles className="h-4 w-4" /> 最新健康方案</div>
           {latestPlan ? (
             <div className="mt-3">
-              <div className="font-medium">{latestPlan.title}</div>
-              <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{latestPlan.summary}</p>
-              <Link to="/plan" className="mt-3 inline-block text-sm font-medium text-brand">查看完整方案 →</Link>
+              <div className="text-sm font-medium">{latestPlan.title}</div>
+              <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{latestPlan.summary}</p>
+              <Link to="/plan" className="mt-3 inline-flex items-center rounded-full bg-brand px-3.5 py-1.5 text-[11px] font-medium text-primary-foreground">查看完整方案</Link>
             </div>
           ) : (
             <div className="mt-3">
-              <p className="text-sm text-muted-foreground">完善档案与量表后，可一键生成 AI 个性化方案。</p>
-              <Link to="/plan" className="mt-3 inline-block text-sm font-medium text-brand">立即生成方案 →</Link>
+              <p className="text-xs text-muted-foreground">完善档案与量表后，可一键生成 AI 个性化方案。</p>
+              <Link to="/plan" className="mt-3 inline-flex items-center rounded-full bg-brand px-3.5 py-1.5 text-[11px] font-medium text-primary-foreground">立即生成方案</Link>
             </div>
           )}
         </div>
@@ -88,8 +90,8 @@ function Home() {
 
 function QuickCard({ to, icon: Icon, title, desc }: { to: any; icon: any; title: string; desc: string }) {
   return (
-    <Link to={to} className="rounded-2xl bg-card p-4 shadow-card hover:shadow-elev transition">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-soft text-brand-deep"><Icon className="h-4 w-4" /></div>
+    <Link to={to} className="rounded-3xl bg-card p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-elev">
+      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft text-brand-deep"><Icon className="h-5 w-5" /></div>
       <div className="mt-3 text-sm font-semibold">{title}</div>
       <div className="mt-0.5 text-[11px] text-muted-foreground">{desc}</div>
     </Link>
