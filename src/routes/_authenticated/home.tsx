@@ -118,6 +118,41 @@ function Home() {
         </div>
       </section>
 
+      {/* 心血管专区 */}
+      <section className="px-4">
+        <SectionTitle title="心血管专区" sub="斑块管理 · SCVD 早筛" extra="进入专区" to="/specialty" />
+        <div className="grid grid-cols-2 gap-2">
+          <Link
+            to="/specialty/scvd"
+            className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#3a78d8] to-[#5aa0ee] p-3 text-primary-foreground shadow-card"
+          >
+            <div className="flex items-center gap-1.5">
+              <ShieldAlert className="h-4 w-4" />
+              <span className="text-[11px] opacity-90">无症状期早筛</span>
+            </div>
+            <div className="mt-1 text-[14px] font-bold">SCVD 专区</div>
+            <div className="mt-0.5 text-[10px] text-white/85">10 年事件风险 · 11.2%</div>
+            <div className="mt-2 inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[10px] backdrop-blur">
+              进入 <ChevronRight className="h-3 w-3" />
+            </div>
+          </Link>
+          <Link
+            to="/specialty/plaque"
+            className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#1f5fb8] to-[#3d86d8] p-3 text-primary-foreground shadow-card"
+          >
+            <div className="flex items-center gap-1.5">
+              <Layers className="h-4 w-4" />
+              <span className="text-[11px] opacity-90">稳斑闭环管理</span>
+            </div>
+            <div className="mt-1 text-[14px] font-bold">斑块管理专区</div>
+            <div className="mt-0.5 text-[10px] text-white/85">稳定性 68 · 待复查</div>
+            <div className="mt-2 inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[10px] backdrop-blur">
+              进入 <ChevronRight className="h-3 w-3" />
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* AI 建档 · 拍一拍 */}
       <section className="px-4">
         <Link
