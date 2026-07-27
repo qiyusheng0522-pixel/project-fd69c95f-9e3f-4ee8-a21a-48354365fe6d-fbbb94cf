@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   FileText, ClipboardList, HeartPulse, Bell, Camera, Sparkles, ChevronRight,
   Activity, Pill, Droplet, Stethoscope, MessageSquare, ShieldAlert, Layers,
-  PlayCircle, BookOpen, ShoppingBag, CheckCircle2, Circle,
+  PlayCircle, BookOpen, ShoppingBag, CheckCircle2, Circle, Users, Compass,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/home")({
@@ -12,7 +13,14 @@ export const Route = createFileRoute("/_authenticated/home")({
   component: Home,
 });
 
+const academy = [
+  { tag: "视频", icon: PlayCircle, points: "+50 积分", title: "斑块稳定的 5 个生活方式细节", meta: "张主任 · 4 分钟 · 1.2w 阅读" },
+  { tag: "图文", icon: BookOpen, points: "+30 积分", title: "他汀类药物，到底要吃多久？", meta: "心内科药师 · 6 分钟 · 842 赞" },
+  { tag: "直播", icon: PlayCircle, points: "+80 积分", title: "本周四 20:00 · 冠脉支架术后随访公开课", meta: "主任医师直播 · 328 已预约" },
+];
+
 function Home() {
+  const [tab, setTab] = useState("全部");
   const { data: profile } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => (await supabase.from("profiles").select("*").maybeSingle()).data,
@@ -51,6 +59,8 @@ function Home() {
   const hasQs = (counts?.qs ?? 0) > 0;
   const hasMeds = (counts?.meds ?? 0) > 0;
   const actionsReady = hasRecords && hasQs;
+  const checkTotal = 4;
+  const checkDone = 1 + (hasMeds ? 1 : 0);
   const todos: { icon: any; title: string; sub: string; cta: string }[] = [];
   if (actionsReady) {
     if (hasMeds) {
@@ -63,9 +73,25 @@ function Home() {
   return (
     <div className="space-y-4 pb-6">
       {/* AI 主治医生卡片 */}
-      <section className="relative overflow-hidden bg-gradient-hero px-4 pb-5 pt-5 text-primary-foreground">
+      <section className="relative overflow-hidden bg-gradient-hero px-4 pb-5 pt-3 text-primary-foreground">
         <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-2xl" />
         <div className="pointer-events-none absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+
+        {/* 顶部标题栏 */}
+        <div className="relative mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[13px] font-semibold">
+            <HeartPulse className="h-4 w-4" /> 心安管家 · 今日任务
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/18 px-2.5 py-1 text-[11px] ring-1 ring-white/25">
+              <Compass className="h-3 w-3" /> 引导
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/18 px-2.5 py-1 text-[11px] ring-1 ring-white/25">
+              <Users className="h-3 w-3" /> 入群
+            </span>
+          </div>
+        </div>
+
         <div className="relative flex gap-3">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 ring-1 ring-white/30 backdrop-blur">
             <HeartPulse className="h-7 w-7" />
@@ -75,14 +101,31 @@ function Home() {
               <Sparkles className="h-3 w-3" /> 心安管家 · 您的 AI 主治医生
             </div>
             <h1 className="mt-1 text-lg font-bold leading-tight">
-              {name}，今早数据已为您解读 👋
+              {name}，今日 {checkTotal} 项待打卡
             </h1>
             <p className="mt-1 text-[12px] leading-relaxed text-white/90">
-              血压 <b>128/82</b>，较昨日平稳；颈动脉斑块复查临近，建议本周完成 SCVD 风险筛查。
+              用药 · 血压 · 饮食 · 运动
             </p>
           </div>
         </div>
-        <div className="relative mt-4 flex items-center gap-2 rounded-full bg-white/18 px-3 py-2 ring-1 ring-white/25 backdrop-blur-md">
+
+        {/* 优先待办 */}
+        <div className="relative mt-4 rounded-2xl bg-white/15 p-3 ring-1 ring-white/25 backdrop-blur-md">
+          <div className="flex items-center justify-between text-[11px] text-white/85">
+            <span>优先待办 · {checkDone}/{checkTotal}</span>
+            <span>{Math.round((checkDone / checkTotal) * 100)}%</span>
+          </div>
+          <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/25">
+            <div className="h-full rounded-full bg-white transition-all" style={{ width: `${(checkDone / checkTotal) * 100}%` }} />
+          </div>
+          <div className="mt-2.5 flex items-center gap-2">
+            <Pill className="h-4 w-4 text-white/90" />
+            <span className="flex-1 truncate text-[12px]">用药 · 阿托伐他汀 · 20:00</span>
+            <button className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-brand-deep">确认</button>
+          </div>
+        </div>
+
+        <div className="relative mt-2 flex items-center gap-2 rounded-full bg-white/18 px-3 py-2 ring-1 ring-white/25 backdrop-blur-md">
           <MessageSquare className="h-4 w-4 text-white/90" />
           <span className="flex-1 text-[12px] text-white/80">向 AI 主治医生提问…</span>
           <Link to="/plan" className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-brand-deep">
@@ -90,27 +133,39 @@ function Home() {
           </Link>
         </div>
         <div className="relative mt-2 flex flex-wrap gap-1.5">
-          {["血压偏高怎么办", "斑块如何稳定", "他汀用药咨询", "复诊预约"].map((t) => (
+          {["血压偏高怎么办", "斑块如何稳定", "他汀用药咨询"].map((t) => (
             <span key={t} className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] text-white/90 ring-1 ring-white/20">
               {t}
             </span>
           ))}
         </div>
-        <Link
-          to="/profile"
-          className="relative mt-3 flex items-center gap-3 rounded-2xl bg-white/95 p-3 text-foreground shadow-elev"
-        >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand-deep">
-            <Stethoscope className="h-5 w-5" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-[13px] font-semibold">咨询心血管科医生？</div>
-            <div className="text-[11px] text-muted-foreground">
-              选择主任 / 主治医生 1v1 · 入院期间锁定主管医护
+        <div className="relative mt-3 flex gap-2">
+          <Link
+            to="/profile"
+            className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl bg-white/95 p-3 text-foreground shadow-elev"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-deep">
+              <Stethoscope className="h-5 w-5" />
             </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-muted-foreground" />
-        </Link>
+            <div className="min-w-0 flex-1">
+              <div className="text-[13px] font-semibold">咨询心血管科医生？</div>
+              <div className="truncate text-[11px] text-muted-foreground">
+                选择主任 / 主治医生 1v1 · 入院锁定主管医护
+              </div>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+          <Link
+            to="/reminders"
+            className="relative flex w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-white/95 text-foreground shadow-elev"
+          >
+            <MessageSquare className="h-5 w-5 text-brand-deep" />
+            <span className="mt-0.5 text-[10px] text-muted-foreground">消息</span>
+            <span className="absolute right-2 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[9px] font-semibold text-destructive-foreground">
+              3
+            </span>
+          </Link>
+        </div>
       </section>
 
       {/* 实时指标 */}
@@ -124,6 +179,7 @@ function Home() {
 
       {/* 快捷入口 */}
       <section className="px-4">
+        <div className="mb-2 text-[12px] font-semibold text-muted-foreground">快捷入口</div>
         <div className="grid grid-cols-4 gap-2">
           <Quick to="/records" icon={FileText} label="病历档案" />
           <Quick to="/reminders" icon={Bell} label="用药提醒" />
@@ -277,12 +333,22 @@ function Home() {
       {/* 评估中心 — 含 SCVD 与斑块管理 */}
       <section className="px-4">
         <SectionTitle title="评估中心" sub="多维评估 + 专病量表" extra="全部 6 项" to="/questionnaires" />
+        <div className="mb-2 flex items-center gap-2 rounded-2xl bg-gradient-card p-3 shadow-card ring-1 ring-white/70">
+          <div className="flex items-baseline gap-1">
+            <span className="text-lg font-bold leading-none text-brand-deep">{Math.max(0, 6 - (counts?.qs ?? 0))}</span>
+            <span className="text-[11px] text-muted-foreground">待完成</span>
+          </div>
+          <div className="h-6 w-px bg-border" />
+          <div className="text-[11px] text-muted-foreground">
+            本月 <b className="text-brand-deep">{Math.min(6, counts?.qs ?? 0)}/6</b> 项 · 完成后同步主诊医生
+          </div>
+        </div>
         <div className="space-y-2">
           <ScaleRow
             to="/questionnaires/$type"
             params={{ type: "scvd" }}
             icon={ShieldAlert}
-            tag="首诊推荐"
+            tag="首诊必填"
             title="亚临床心血管病 (SCVD) 风险筛查"
             sub="10 题 · 约 2 分钟，识别无症状期动脉硬化风险"
           />
@@ -303,17 +369,28 @@ function Home() {
             sub="8 题 · 评估血压控制与依从性"
           />
         </div>
+        <p className="mt-2 text-[10px] text-muted-foreground">更多生活问卷可选填，不强制进入评估中心</p>
       </section>
 
       {/* 健康百科 */}
       <section className="px-4">
         <SectionTitle title="健康百科" sub="看完单篇得积分" extra="进入百科" />
+        <div className="mb-2 flex gap-1.5">
+          {["全部", "视频", "图文", "直播"].map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={
+                "rounded-full px-3 py-1 text-[11px] font-medium transition " +
+                (tab === t ? "bg-brand text-primary-foreground" : "bg-muted text-muted-foreground")
+              }
+            >
+              {t}
+            </button>
+          ))}
+        </div>
         <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1">
-          {[
-            { tag: "视频", icon: PlayCircle, title: "斑块稳定的 5 个生活方式细节", meta: "张主任 · 4 分钟 · +50 积分" },
-            { tag: "图文", icon: BookOpen, title: "他汀类药物，到底要吃多久？", meta: "心内科药师 · 6 分钟 · +30 积分" },
-            { tag: "直播", icon: PlayCircle, title: "本周四 20:00 · 冠脉支架术后随访公开课", meta: "主任医师直播 · +80 积分" },
-          ].map((c) => {
+          {academy.filter((c) => tab === "全部" || c.tag === tab).map((c) => {
             const Icon = c.icon;
             return (
               <div key={c.title} className="w-[200px] shrink-0 overflow-hidden rounded-2xl bg-card shadow-card">
@@ -321,6 +398,9 @@ function Home() {
                   <Icon className="h-9 w-9 opacity-90" />
                   <span className="absolute left-2 top-2 rounded-full bg-black/30 px-2 py-0.5 text-[10px] backdrop-blur">
                     {c.tag}
+                  </span>
+                  <span className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-brand-deep">
+                    {c.points}
                   </span>
                 </div>
                 <div className="p-3">
@@ -335,6 +415,7 @@ function Home() {
 
       {/* 商城 */}
       <section className="px-4">
+        <SectionTitle title="心安管家健康服务包" sub="医生甄选" extra="全部服务" />
         <div className="overflow-hidden rounded-3xl bg-gradient-card p-4 shadow-card ring-1 ring-white/70">
           <div className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand text-primary-foreground">
