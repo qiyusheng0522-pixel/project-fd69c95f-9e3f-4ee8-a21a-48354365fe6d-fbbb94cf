@@ -52,6 +52,8 @@ function Home() {
   const hasQs = (counts?.qs ?? 0) > 0;
   const hasMeds = (counts?.meds ?? 0) > 0;
   const actionsReady = hasRecords && hasQs;
+  const checkTotal = 4;
+  const checkDone = 1 + (hasMeds ? 1 : 0);
   const todos: { icon: any; title: string; sub: string; cta: string }[] = [];
   if (actionsReady) {
     if (hasMeds) {
