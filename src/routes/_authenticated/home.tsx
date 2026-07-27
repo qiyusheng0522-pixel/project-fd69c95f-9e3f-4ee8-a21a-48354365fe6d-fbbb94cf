@@ -179,6 +179,7 @@ function Home() {
 
       {/* 快捷入口 */}
       <section className="px-4">
+        <div className="mb-2 text-[12px] font-semibold text-muted-foreground">快捷入口</div>
         <div className="grid grid-cols-4 gap-2">
           <Quick to="/records" icon={FileText} label="病历档案" />
           <Quick to="/reminders" icon={Bell} label="用药提醒" />
