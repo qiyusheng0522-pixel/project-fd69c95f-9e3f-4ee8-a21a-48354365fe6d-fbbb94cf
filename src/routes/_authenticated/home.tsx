@@ -13,7 +13,14 @@ export const Route = createFileRoute("/_authenticated/home")({
   component: Home,
 });
 
+const academy = [
+  { tag: "视频", icon: PlayCircle, points: "+50 积分", title: "斑块稳定的 5 个生活方式细节", meta: "张主任 · 4 分钟 · 1.2w 阅读" },
+  { tag: "图文", icon: BookOpen, points: "+30 积分", title: "他汀类药物，到底要吃多久？", meta: "心内科药师 · 6 分钟 · 842 赞" },
+  { tag: "直播", icon: PlayCircle, points: "+80 积分", title: "本周四 20:00 · 冠脉支架术后随访公开课", meta: "主任医师直播 · 328 已预约" },
+];
+
 function Home() {
+  const [tab, setTab] = useState("全部");
   const { data: profile } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => (await supabase.from("profiles").select("*").maybeSingle()).data,
